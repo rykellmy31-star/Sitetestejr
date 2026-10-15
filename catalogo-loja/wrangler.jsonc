@@ -2,22 +2,14 @@
   // ============================================================
   //  CATÁLOGO DE PRODUTOS — configuração do Cloudflare Workers
   // ============================================================
-  //  ATENÇÃO: o campo "database_id" abaixo é um EXEMPLO.
-  //  Você DEVE substituí-lo pelo ID real do seu banco D1.
-  //  Para obter o ID, rode no terminal:
-  //      npx wrangler d1 create catalogo-db
-  //  O comando imprime o ID. Copie e cole no lugar do texto
-  //  "SUBSTITUA_PELO_ID_DO_SEU_BANCO_D1".
-  // ============================================================
 
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "catalogo-loja",
+  "name": "sitetestejr",
   "main": "src/worker.js",
   "compatibility_date": "2025-09-01",
   "workers_dev": true,
 
   // Arquivos estáticos (HTML, CSS, JS, ícone e as fotos de demonstração).
-  // O Worker controla as rotas /api/* e /imagens/*; o resto é servido daqui.
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
@@ -29,7 +21,7 @@
     {
       "binding": "DB",
       "database_name": "catalogo-db",
-      "database_id": "SUBSTITUA_PELO_ID_DO_SEU_BANCO_D1"
+      "database_id": "COLOQUE_AQUI_O_ID_DO_SEU_BANCO"
     }
   ],
 
@@ -44,10 +36,5 @@
   // Logs no painel da Cloudflare (ajuda a ver erros em produção)
   "observability": {
     "enabled": true
-  },
-
-  // Rota pública opcional, caso você use um domínio próprio.
-  // Exemplo: "catalogo.sualoja.com.br/*". Deixe comentado enquanto
-  // estiver usando o endereço gratuito *.workers.dev
-  // "routes": [{ "pattern": "exemplo.com/*", "custom_domain": true }]
+  }
 }
