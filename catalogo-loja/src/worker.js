@@ -54,6 +54,13 @@ export default {
         return await entregarFoto(request, env, caminho.slice('/imagens/'.length));
       }
 
+      // ----------------------------------------------- validar chave do painel
+      // Endpoint explícito para testar a chave antes de guardá-la no navegador.
+      if (caminho === '/api/admin/validar' && request.method === 'GET') {
+        if (!autorizado(request, env)) return erro('Chave do painel incorreta ou ausente.', 401);
+        return json({ ok: true, mensagem: 'Chave do painel validada.' });
+      }
+
       // ------------------------------------------------------------ catálogo
       if (caminho === '/api/produtos') {
         if (request.method === 'GET') return await listarProdutos(request, env);
