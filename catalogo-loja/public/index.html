@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d5c63" />
+  <meta name="description" content="Catálogo de produtos com fotos, pesquisa, filtros por categoria e compra pelo WhatsApp." />
+  <title>Catálogo de Produtos</title>
+  <link rel="icon" href="/icone.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/estilos.css" />
+</head>
+<body>
+
+  <!-- ====================== TOPO ====================== -->
+  <header class="topo">
+    <div class="container topo__linha">
+      <div class="marca">
+        <span class="marca__icone" data-icone="sacola"></span>
+        <span class="marca__texto">
+          <span class="marca__nome" id="nome-loja">Minha Loja</span>
+          <span class="marca__sub">Catálogo de produtos</span>
+        </span>
+      </div>
+      <div class="topo__acoes">
+        <a class="botao botao--claro botao--pequeno" href="/admin" title="Área do administrador"><span data-icone="engrenagem"></span> Painel</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ====================== APRESENTAÇÃO ====================== -->
+    <section class="apresentacao">
+      <span class="apresentacao__selo">✨ Demonstração com produtos de exemplo</span>
+      <h1>Confira nossos produtos</h1>
+      <p>
+        Toque em qualquer produto para ver a foto ampliada, a descrição completa e o preço.
+        Depois é só clicar em <strong>Comprar pelo WhatsApp</strong> para falar com a loja.
+      </p>
+    </section>
+
+    <!-- ====================== BUSCA E ORDEM ====================== -->
+    <section class="ferramentas">
+      <div class="busca">
+        <span class="busca__lupa" data-icone="lupa"></span>
+        <label class="apenas-leitor" for="campo-busca">Pesquisar produto pelo nome</label>
+        <input id="campo-busca" type="search" inputmode="search" autocomplete="off"
+               placeholder="Pesquisar por nome, descrição ou categoria..." />
+        <button class="busca__limpar oculto" id="limpar-busca" type="button" title="Limpar pesquisa" aria-label="Limpar pesquisa">✕</button>
+      </div>
+      <div class="ordenar">
+        <label for="campo-ordem">Ordenar:</label>
+        <select id="campo-ordem">
+          <option value="recentes">Mais recentes</option>
+          <option value="preco_asc">Menor preço</option>
+          <option value="preco_desc">Maior preço</option>
+          <option value="nome">Nome (A–Z)</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- ====================== CATEGORIAS ====================== -->
+    <nav class="categorias" id="categorias" aria-label="Filtro por categoria"></nav>
+
+    <!-- ====================== RESUMO + GRADE ====================== -->
+    <div class="resumo">
+      <h2 class="resumo__titulo" id="titulo-resultado">Produtos</h2>
+      <span class="resumo__texto" id="texto-resultado"></span>
+    </div>
+
+    <div class="grade" id="grade" aria-live="polite"></div>
+
+    <section class="vazio oculto" id="vazio">
+      <div class="vazio__icone" data-icone="lupa"></div>
+      <h3>Nenhum produto encontrado</h3>
+      <p>Tente outra palavra na pesquisa ou escolha a categoria “Todas”.</p>
+      <button class="botao botao--claro" type="button" id="limpar-filtros">Limpar filtros</button>
+    </section>
+
+  </main>
+
+  <!-- ====================== RODAPÉ ====================== -->
+  <footer class="rodape">
+    <div class="container rodape__grade">
+      <div>
+        <strong id="nome-loja-rodape">Minha Loja</strong>
+        <p id="contato-rodape">Fale com a loja pelo WhatsApp.</p>
+        <p class="rodape__regras">
+          Os produtos marcados com o selo <em>Exemplo editável</em> são fictícios e fazem parte da
+          demonstração do catálogo. Troque, edite ou exclua todos eles no painel administrativo.
+        </p>
+      </div>
+      <div>
+        <a class="botao botao--claro botao--pequeno" href="/admin"><span data-icone="engrenagem"></span> Painel do administrador</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================== JANELA DO PRODUTO ====================== -->
+  <div class="janela" id="janela" role="dialog" aria-modal="true" aria-labelledby="janela-nome">
+    <div class="janela__fundo" data-fechar></div>
+    <div class="janela__caixa">
+      <button class="janela__fechar" id="janela-fechar" type="button" aria-label="Fechar" data-fechar>✕</button>
+      <div class="janela__grade">
+        <div class="janela__midia">
+          <img id="janela-imagem" src="/sem-foto.svg" alt="" />
+        </div>
+        <div class="janela__conteudo">
+          <p class="janela__categoria" id="janela-categoria">Categoria</p>
+          <h2 class="janela__nome" id="janela-nome">Produto</h2>
+          <p class="janela__preco" id="janela-preco">R$ 0,00</p>
+          <p class="janela__descricao" id="janela-descricao"></p>
+          <p class="janela__aviso oculto" id="janela-demo">
+            <span data-icone="frasco"></span> Produto de demonstração: nome, preço e descrição são exemplos editáveis no painel.
+          </p>
+          <div class="janela__acoes">
+            <button class="botao botao--zap botao--bloco" id="janela-comprar" type="button">
+              <span data-icone="whatsapp"></span> Comprar pelo WhatsApp
+            </button>
+            <button class="botao botao--claro botao--bloco" id="janela-copiar" type="button"><span data-icone="link"></span> Copiar link do produto</button>
+          </div>
+          <p class="janela__meta" id="janela-meta"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="avisos" id="avisos" aria-live="polite"></div>
+
+  <script src="/js/icones.js"></script>
+  <script src="/js/catalogo.js"></script>
+</body>
+</html>

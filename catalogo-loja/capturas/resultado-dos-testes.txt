@@ -1,0 +1,24 @@
+✅ Catálogo abriu no celular com os cartões — 10 cartões
+✅ Todas as fotos dos produtos carregaram — 10/10 fotos
+✅ Produtos de demonstração estão marcados como exemplo — 10 selos
+✅ Grade do celular mostra 2 colunas — 2 colunas
+✅ Pesquisa por nome funciona — "fone" -> 1 resultado: Fone de ouvido bluetooth
+✅ Estado "nenhum produto encontrado" aparece
+✅ Filtro por categoria funciona — 2 produtos em Acessórios
+✅ Ordenação por menor preço funciona — primeiro: R$ 45,00
+✅ Janela de detalhes abre com foto maior, preço e botão de WhatsApp — preço na janela: R$ 79,90
+✅ Pré-visualização da foto escolhida aparece antes de salvar — blob:http://127.0.0.1:...
+✅ Produto salvo aparece na lista do painel
+✅ Produto novo aparece no catálogo público
+✅ Foto do novo produto é servida pelo armazenamento (/imagens/...) — /imagens/produtos/1792038591634-w6coac.jpg
+✅ Depois de recarregar, produto e foto continuam salvos — status da foto: 200
+✅ Exclusão pede confirmação antes de apagar
+✅ Produto excluído sai da lista do painel
+✅ Produto excluído sai do catálogo público
+✅ Foto do produto excluído foi apagada do armazenamento — status: 404
+✅ Trocar foto pela lista do painel funciona — /imagens/produtos/1792038599899-prxvv4.jpg
+✅ Nova foto foi guardada no armazenamento — status: 200
+✅ Opção avançada (foto já publicada) funciona — /imagens/07-kit-skincare.jpg
+✅ Grade responsiva mostra várias colunas no computador — 4 colunas
+✅ Foto com erro é trocada pela imagem substituta (sem quebrar o site)
+✅ Nenhum erro de JavaScript no console do navegador

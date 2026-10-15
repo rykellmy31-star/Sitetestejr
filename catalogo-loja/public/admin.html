@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d5c63" />
+  <meta name="robots" content="noindex" />
+  <title>Painel do administrador — Catálogo</title>
+  <link rel="icon" href="/icone.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/estilos.css" />
+</head>
+<body>
+
+  <header class="topo">
+    <div class="container topo__linha">
+      <div class="marca">
+        <span class="marca__icone" data-icone="engrenagem"></span>
+        <span class="marca__texto">
+          <span class="marca__nome">Painel</span>
+          <span class="marca__sub" id="subtitulo-loja">Catálogo de produtos</span>
+        </span>
+      </div>
+      <a class="botao botao--claro botao--pequeno" href="/"><span data-icone="olho"></span> Ver catálogo</a>
+    </div>
+    <div class="container">
+      <div class="abas" role="tablist">
+        <button class="aba aba--ativa" data-aba="produtos" type="button" role="tab"><span data-icone="caixa"></span> Produtos</button>
+        <button class="aba" data-aba="cadastro" type="button" role="tab"><span data-icone="mais"></span> Cadastrar produto</button>
+        <button class="aba" data-aba="config" type="button" role="tab"><span data-icone="loja"></span> Configurações da loja</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="painel">
+
+    <!-- ==================== CHAVE DO PAINEL ==================== -->
+    <section class="bloco" id="bloco-chave">
+      <h2 class="bloco__titulo"><span data-icone="cadeado"></span> Chave do painel</h2>
+      <div class="formulario">
+        <div class="campo">
+          <label for="campo-token">Chave de acesso (ADMIN_TOKEN)</label>
+          <input id="campo-token" type="password" autocomplete="off" placeholder="Cole aqui a mesma chave que você criou na Cloudflare" />
+          <span class="campo__ajuda">
+            Você só precisa preencher se tiver criado a variável secreta <code>ADMIN_TOKEN</code> no Worker.
+            A chave fica guardada somente neste celular/computador.
+          </span>
+        </div>
+        <div class="acoes-confirmacao">
+          <button class="botao botao--pequeno" type="button" id="salvar-token">Salvar chave</button>
+          <button class="botao botao--fantasma botao--pequeno" type="button" id="esquecer-token">Esquecer chave</button>
+        </div>
+        <p class="campo__ajuda" id="status-chave"></p>
+      </div>
+    </section>
+
+    <!-- ==================== ABA: LISTA DE PRODUTOS ==================== -->
+    <section data-painel="produtos">
+      <h2>Produtos cadastrados</h2>
+      <p class="painel__dica">
+        Aqui você edita, troca ou exclui a foto e remove produtos. As alterações aparecem no catálogo na hora.
+      </p>
+
+      <div class="bloco">
+        <div class="busca">
+          <span class="busca__lupa" data-icone="lupa"></span>
+          <label class="apenas-leitor" for="busca-painel">Pesquisar produto</label>
+          <input id="busca-painel" type="search" placeholder="Pesquisar produto por nome ou categoria..." />
+        </div>
+      </div>
+
+      <div class="lista-painel" id="lista-produtos"></div>
+      <div class="vazio oculto" id="vazio-painel">
+        <div class="vazio__icone" data-icone="caixa"></div>
+        <h3>Nenhum produto encontrado</h3>
+        <p>Cadastre um novo produto na aba “Cadastrar produto”.</p>
+      </div>
+    </section>
+
+    <!-- ==================== ABA: CADASTRO ==================== -->
+    <section data-painel="cadastro" class="oculto">
+      <h2 id="titulo-formulario">Cadastrar novo produto</h2>
+      <p class="painel__dica">
+        Escolha a foto da galeria do celular, confira a pré-visualização e preencha os dados.
+        A foto é enviada para o armazenamento da Cloudflare (R2) e continua disponível sempre.
+      </p>
+
+      <form class="bloco formulario" id="formulario-produto" novalidate>
+        <input type="hidden" id="produto-id" />
+
+        <div class="area-foto">
+          <div>
+            <div class="previa" id="previa">
+              <div class="previa__dica" id="previa-dica">
+                <span class="previa__camera" data-icone="camera"></span>
+                Nenhuma foto selecionada ainda
+              </div>
+              <img id="previa-imagem" class="oculto" alt="Pré-visualização da foto escolhida" />
+              <div class="previa__barra oculto" id="barra-progresso">
+                <div class="previa__progresso" id="progresso"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="formulario">
+            <div class="campo">
+              <label for="arquivo-galeria">Foto do produto</label>
+              <input id="arquivo-galeria" type="file" accept="image/*" />
+              <span class="campo__ajuda">Formatos aceitos: JPG, PNG, WEBP ou GIF — até 8 MB.</span>
+            </div>
+            <div class="acoes-confirmacao">
+              <label class="botao botao--claro botao--pequeno" for="arquivo-camera"><span data-icone="camera"></span> Tirar foto agora</label>
+              <input id="arquivo-camera" class="oculto" type="file" accept="image/*" capture="environment" />
+              <button class="botao botao--fantasma botao--pequeno" type="button" id="remover-foto"><span data-icone="lixeira"></span> Remover foto</button>
+            </div>
+            <p class="campo__ajuda" id="status-foto">Dica: fotos quadradas (1:1) com fundo claro ficam mais bonitas no catálogo.</p>
+
+            <details>
+              <summary style="font-size:13.5px;font-weight:600;cursor:pointer">Opção avançada: usar uma foto já publicada (sem enviar)</summary>
+              <div class="campo" style="margin-top:10px">
+                <label for="campo-imagem-manual">Endereço da foto</label>
+                <input id="campo-imagem-manual" type="text" placeholder="/imagens/nome-do-arquivo.jpg" />
+                <span class="campo__ajuda">
+                  Serve para reutilizar a foto de outro produto ou uma imagem que você colocou na pasta
+                  <code>public/demo</code> do projeto (ex.: <code>/imagens/minha-foto.jpg</code>).
+                  Deixe em branco para usar a foto enviada acima. Também aceita endereços que comecem com <code>https://</code>.
+                </span>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--borda);margin:4px 0" />
+
+        <div class="campo">
+          <label for="campo-nome">Nome do produto *</label>
+          <input id="campo-nome" type="text" maxlength="120" required placeholder="Ex.: Camiseta básica de algodão" />
+        </div>
+
+        <div class="linha-dupla">
+          <div class="campo">
+            <label for="campo-preco">Preço em reais (R$) *</label>
+            <input id="campo-preco" type="text" inputmode="decimal" placeholder="Ex.: 59,90" />
+            <span class="campo__ajuda">Use vírgula ou ponto. Ex.: 129,90</span>
+          </div>
+          <div class="campo">
+            <label for="campo-categoria">Categoria *</label>
+            <input id="campo-categoria" type="text" maxlength="60" list="lista-categorias" placeholder="Ex.: Vestuário" />
+            <datalist id="lista-categorias"></datalist>
+            <span class="campo__ajuda">Você pode escrever uma categoria nova ou escolher uma existente.</span>
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="campo-descricao">Descrição</label>
+          <textarea id="campo-descricao" maxlength="2000" placeholder="Materiais, tamanhos, cores, garantia, prazo de entrega..."></textarea>
+        </div>
+
+        <label style="display:flex;align-items:center;gap:10px;font-size:14px">
+          <input type="checkbox" id="campo-ativo" checked style="width:auto" />
+          Mostrar este produto no catálogo
+        </label>
+
+        <div class="acoes-confirmacao">
+          <button class="botao botao--zap" type="submit" id="botao-salvar"><span data-icone="disquete"></span> Salvar produto</button>
+          <button class="botao botao--fantasma" type="button" id="botao-cancelar">Cancelar edição</button>
+        </div>
+        <p class="campo__ajuda" id="status-formulario"></p>
+      </form>
+    </section>
+
+    <!-- ==================== ABA: CONFIGURAÇÕES ==================== -->
+    <section data-painel="config" class="oculto">
+      <h2>Configurações da loja</h2>
+      <p class="painel__dica">Estes dados aparecem no topo do catálogo e nos botões de compra pelo WhatsApp.</p>
+
+      <form class="bloco formulario" id="formulario-config">
+        <div class="campo">
+          <label for="config-nome">Nome da loja</label>
+          <input id="config-nome" type="text" maxlength="60" placeholder="Ex.: Bela Moda" />
+        </div>
+        <div class="campo">
+          <label for="config-whatsapp">WhatsApp com código do país e DDD</label>
+          <input id="config-whatsapp" type="text" inputmode="tel" placeholder="Ex.: 5573999999999" />
+          <span class="campo__ajuda">Somente números. Brasil = 55 + DDD + número. Ex.: 55 73 99999-9999 vira 5573999999999.</span>
+        </div>
+        <div class="campo">
+          <label for="config-mensagem">Mensagem que o cliente envia</label>
+          <textarea id="config-mensagem" maxlength="500"></textarea>
+          <span class="campo__ajuda">
+            Você pode usar: <code>{produto}</code>, <code>{preco}</code>, <code>{categoria}</code>, <code>{link}</code> e <code>{loja}</code>.
+          </span>
+        </div>
+        <div class="acoes-confirmacao">
+          <button class="botao botao--zap" type="submit"><span data-icone="disquete"></span> Salvar configurações</button>
+        </div>
+        <p class="campo__ajuda" id="status-config"></p>
+      </form>
+
+      <div class="bloco">
+        <h3 class="bloco__titulo"><span data-icone="info"></span> Onde as informações ficam guardadas</h3>
+        <p style="font-size:14px;color:var(--texto-suave);margin:0">
+          Os produtos ficam no banco de dados <strong>D1</strong> e as fotos no armazenamento <strong>R2</strong>,
+          ambos da Cloudflare. Por isso tudo continua salvo depois de atualizar a página, trocar de celular
+          ou publicar uma nova versão do site.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="avisos" id="avisos" aria-live="polite"></div>
+
+  <script src="/js/icones.js"></script>
+  <script src="/js/painel.js"></script>
+</body>
+</html>
