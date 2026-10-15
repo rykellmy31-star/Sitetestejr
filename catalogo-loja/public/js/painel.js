@@ -312,45 +312,12 @@ function ligarEventosPainel() {
   // Busca da lista
   tela.busca.addEventListener('input', renderizarListaPainel);
 
-  // Chave do painel: validar no servidor antes de guardar no navegador.
-  tela.salvarToken.addEventListener('click', async () => {
-    const candidata = tela.token.value.trim();
-    if (!candidata) {
-      avisar('Digite a chave ADMIN_TOKEN configurada no Worker.', 'erro');
-      return;
-    }
-
-    tela.salvarToken.disabled = true;
-    const textoOriginal = tela.salvarToken.textContent;
-    tela.salvarToken.textContent = 'Verificando...';
-    try {
-      const resposta = await fetch('/api/admin/validar', {
-        method: 'GET',
-        headers: { accept: 'application/json', 'x-admin-token': candidata },
-        cache: 'no-store'
-      });
-      let dados = {};
-      try { dados = await resposta.json(); } catch (_) {}
-      if (!resposta.ok) {
-        throw new Error(resposta.status === 401
-          ? 'A chave não corresponde ao ADMIN_TOKEN do Worker publicado. Confira o segredo no ambiente de produção.'
-          : (dados.erro || 'Não foi possível validar a chave.'));
-      }
-
-      estadoPainel.token = candidata;
-      localStorage.setItem(CHAVE_TOKEN, candidata);
-      tela.statusChave.textContent = 'Chave validada e guardada neste aparelho.';
-      avisar('Chave validada e guardada neste aparelho.', 'sucesso');
-      await carregarTudo();
-    } catch (falha) {
-      estadoPainel.token = '';
-      localStorage.removeItem(CHAVE_TOKEN);
-      avisar(falha.message || 'Não foi possível validar a chave.', 'erro');
-      tela.statusChave.textContent = falha.message || 'Não foi possível validar a chave.';
-    } finally {
-      tela.salvarToken.disabled = false;
-      tela.salvarToken.textContent = textoOriginal;
-    }
+  // Chave do painel
+  tela.salvarToken.addEventListener('click', () => {
+    estadoPainel.token = tela.token.value.trim();
+    if (estadoPainel.token) localStorage.setItem(CHAVE_TOKEN, estadoPainel.token);
+    else localStorage.removeItem(CHAVE_TOKEN);
+    avisar('Chave guardada neste aparelho.', 'sucesso');
   });
   tela.esquecerToken.addEventListener('click', () => {
     estadoPainel.token = '';
