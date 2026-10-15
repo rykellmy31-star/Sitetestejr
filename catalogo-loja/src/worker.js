@@ -461,7 +461,8 @@ function assinaturaValida(bytes, tipo) {
 
 function autorizado(request, env) {
   const token = (env.ADMIN_TOKEN || '').trim();
-  if (!token) return true; // sem ADMIN_TOKEN definido, o painel fica aberto
+  // Fail closed: sem segredo configurado, nenhuma operação administrativa é autorizada.
+  if (!token) return false;
   return (request.headers.get('x-admin-token') || '') === token;
 }
 
