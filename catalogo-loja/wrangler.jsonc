@@ -21,7 +21,8 @@
     {
       "binding": "DB",
       "database_name": "catalogo-db",
-      "database_id": "c249077f-b55a-4956-b177-04717d5d0877"
+      "database_id": "c249077f-b55a-4956-b177-04717d5d0877",
+      "preview_database_id": "c249077f-b55a-4956-b177-04717d5d0877"
     }
   ],
 
